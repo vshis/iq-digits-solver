@@ -1,9 +1,12 @@
 from matplotlib.path import Path
 from matplotlib.patches import PathPatch
+from matplotlib.collections import PatchCollection
 import matplotlib.pyplot as plt
+import os
 
 from gameboard import GameBoard
 from segment import Segment
+
 
 color_mapping = {
     0: '#ff0533',
@@ -16,6 +19,7 @@ color_mapping = {
     7: '#0234bf',
     8: '#4d02b0',
     9: '#f73bf4',
+    None: '#575c58'
 }
 
 board: GameBoard = GameBoard()
@@ -23,25 +27,33 @@ board.board[0][0].set_value(5)
 
 vertices = []
 codes = []
+colors = []
 
 for row_idx, row in enumerate(board.board):
     row_idx = row_idx//2 * -1
     for segment_idx, segment in enumerate(row):
-        codes += [Path.MOVETO]
-        codes += [Path.LINETO]
-        vertices += [(segment_idx, row_idx)]
+        codes.append([Path.MOVETO, Path.LINETO])
+        colors.append(color_mapping[segment.get_value()])
+        vert_temp = []
+        vert_temp += [(segment_idx, row_idx)]
         if segment.get_direction() == 'horizontal':
-            vertices += [(segment_idx + 1, row_idx)]
+            vert_temp += [(segment_idx + 1, row_idx)]
         else:
-            vertices += [(segment_idx, row_idx - 1)]
+            vert_temp += [(segment_idx, row_idx - 1)]
+        vertices.append(vert_temp)
 
-# vertices += [(1, 1), (2, 1), (1, 2), (2, 2)]
-# codes += [Path.MOVETO, Path.LINETO, Path.MOVETO, Path.LINETO]
+# vertices += [[(1, 1), (2, 1)], [(1, 2), (2, 2)]]
+# codes += [[Path.MOVETO, Path.LINETO], [Path.MOVETO, Path.LINETO]]
+# colors = ['red', 'orange']
+pathpatches = [PathPatch(Path(vertices[i], codes[i]), edgecolor=colors[i], linewidth=5) for i in range(len(vertices))]
 
-path = Path(vertices, codes)
-pathpatch = PathPatch(path, facecolor='none', edgecolor='grey', linewidth=2)
+collection = PatchCollection(pathpatches, match_original=True)
 
 fig, ax = plt.subplots()
-ax.add_patch(pathpatch)
+ax.add_collection(collection)
 ax.autoscale_view()
-plt.savefig("x.png")
+
+save_path = os.path.abspath(os.path.dirname(__file__))
+plt.savefig(os.path.join(save_path, "output.png"))
+
+
