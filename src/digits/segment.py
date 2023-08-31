@@ -32,8 +32,8 @@ class Segment:
         return self._value
     
     def __str__(self) -> str:
-        # return f"{'|' if self._direction == 'vertical' else '_'}{self._value}"
-        return f"{('|' if self._direction == 'vertical' else '_') if self._value else '.'}"
+        return f"{'|' if self._direction == 'vertical' else '_'}{self._value}"
+        # return f"{('|' if self._direction == 'vertical' else '_') if self._value else '.'}"
     
     def __repr__(self) -> str:
         # return f"{('|' if self._direction == 'vertical' else '_') if self._value else '.'}"
