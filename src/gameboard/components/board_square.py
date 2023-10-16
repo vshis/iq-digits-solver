@@ -37,6 +37,12 @@ class BoardSquare:
         else:
             raise ValueError(f'Invalid segment value: "{segment}"')
 
+    def get_all_segments(self):
+        """Returns a tuple of all four segments, in order:
+        up, down, left, right
+        """
+        return self.segment_up, self.segment_down, self.segment_left, self.segment_right
+
     def __str__(self) -> str:
         return f'Square(up={self.segment_up.get_value()}, down={self.segment_down.get_value()}, left={self.segment_left.get_value()}, right={self.segment_right.get_value()})'
 
