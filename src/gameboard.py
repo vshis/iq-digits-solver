@@ -15,6 +15,7 @@ import os
 from typing import Literal, Tuple
 
 from digits.segment import Segment
+from digits.game_digit import GameDigit
 
 
 COLOR_MAPPING = {
@@ -109,23 +110,49 @@ class GameBoard:
             output += '\n'
         return output
     
-    def place_digit(self, digit: int, location: Tuple[int, int], direction: Literal['down', 'right', 'left', 'up']) -> None:
-        
-        pass
+    def place_digit(self, digit, start_location: Tuple[int, int], direction: Literal['down', 'right', 'left', 'up']) -> None:
+        current_location = start_location
+
+        if direction == 'down':
+            for row in digit.get_grid(direction=direction):
+                for digit_segment in row:
+                    self._place_segment(digit_segment, current_location)
+                    # go to next column
+                    current_location = (current_location[0], current_location[1] + 1)
+                # go to next row, refresh column back to start
+                current_location = (current_location[0] + 1, start_location[1])
+
+        elif direction == 'right':
+            for column_index, column in enumerate(digit.get_grid(direction=direction)):
+                # for vertical columns 
+                if column_index % 2 == 0:
+                    for digit_segment in column:
+                        self._place_segment(digit_segment, current_location)
+                        # go to next row
+                        current_location = (current_location[0] + 1, current_location[1])
+                # for horizontal columns
+                else:
+                    current_location = (start_location[0] - 1, current_location[1])
+                    for digit_segment in column:
+                        self._place_segment(digit_segment, current_location)
+                        # go to next row
+                        current_location = (current_location[0] + 2, current_location[1])
+                    # go to next column, refresh row back to start
+                    current_location = (start_location[0], current_location[1] + 1)
     
 
-def place_segment(digit_segment: Segment, current_location: Tuple[int, int]):
-    try:
-        current_board_segment: Segment = board.board[current_location[0]][current_location[1]]
-    except IndexError:
-        raise IndexError(f"Cannot place digit {digit_segment.get_value()}. Selected placement is out of grid bounds: {current_location}")
+    def _place_segment(self, digit_segment: Segment, current_location: Tuple[int, int]) -> None:
+        try:
+            current_board_segment: Segment = self.board[current_location[0]][current_location[1]]
+        except IndexError:
+            raise IndexError(f"Cannot place digit {digit_segment.get_value()}. Selected placement is out of grid bounds: {current_location}")
 
-    if current_board_segment.get_value() is not None and digit_segment.get_value() is not None:
-        raise ValueError(f'Cannot place digit {digit_segment.get_value()}. Segment at location {current_location} is occupied by: {current_board_segment}')
-    elif current_board_segment.get_direction() != digit_segment.get_direction():
-        raise ValueError(f'Cannot place digit {digit_segment.get_value()}. {current_board_segment.get_direction().capitalize()} segment at location {current_location} does not match the direction of the {digit_segment.get_direction()} digit segment.')
-    else:
-        current_board_segment.set_value(digit_segment.get_value())
+        if current_board_segment.get_value() is not None and digit_segment.get_value() is not None:
+            raise ValueError(f'Cannot place digit {digit_segment.get_value()}. Segment at location {current_location} is occupied by: {current_board_segment}')
+        elif current_board_segment.get_direction() != digit_segment.get_direction():
+            raise ValueError(f'Cannot place digit {digit_segment.get_value()}. {current_board_segment.get_direction().capitalize()} segment at location {current_location} does not match the direction of the {digit_segment.get_direction()} digit segment.')
+        else:
+            current_board_segment.set_value(digit_segment.get_value())
 
 
 if __name__ == '__main__':
@@ -140,69 +167,8 @@ if __name__ == '__main__':
     current_location = start_location
     direction = 'right'
     digit = zero
-    
-    if direction == 'down':
-        for row in digit.get_grid(direction=direction):
-            for digit_segment in row:
-                place_segment(digit_segment, current_location)
-                # try:
-                #     current_board_segment: Segment = board.board[current_location[0]][current_location[1]]
-                # except IndexError:
-                #     raise IndexError(f"Cannot place digit {digit_segment.get_value()}. Selected placement is out of grid bounds: {current_location}")
 
-                # if current_board_segment.get_value() is not None and digit_segment.get_value() is not None:
-                #     raise ValueError(f'Cannot place digit {digit_segment.get_value()}. Segment at location {current_location} is occupied by: {current_board_segment}')
-                # elif current_board_segment.get_direction() != digit_segment.get_direction():
-                #     raise ValueError(f'Cannot place digit {digit_segment.get_value()}. {current_board_segment.get_direction().capitalize()} segment at location {current_location} does not match the direction of the {digit_segment.get_direction()} digit segment.')
-                # else:
-                #     current_board_segment.set_value(digit_segment.get_value())
-
-                # go to next column
-                current_location = (current_location[0], current_location[1] + 1)
-            # go to next row, refresh column back to start
-            current_location = (current_location[0] + 1, start_location[1])
-
-    elif direction == 'right':
-        for column_index, column in enumerate(digit.get_grid(direction=direction)):
-            # for vertical columns 
-            if column_index % 2 == 0:
-                for digit_segment in column:
-                    place_segment(digit_segment, current_location)
-                    # try:
-                    #     current_board_segment: Segment = board.board[current_location[0]][current_location[1]]
-                    # except IndexError:
-                    #     raise IndexError(f"Cannot place digit {digit_segment.get_value()}. Selected placement is out of grid bounds: {current_location}")
-
-                    # if current_board_segment.get_value() is not None and digit_segment.get_value() is not None:
-                    #     raise ValueError(f'Cannot place digit {digit_segment.get_value()}. Segment at location {current_location} is occupied by: {current_board_segment}')
-                    # elif current_board_segment.get_direction() != digit_segment.get_direction():
-                    #     raise ValueError(f'Cannot place digit {digit_segment.get_value()}. {current_board_segment.get_direction().capitalize()} segment at location {current_location} does not match the direction of the {digit_segment.get_direction()} digit segment.')
-                    # else:
-                    #     current_board_segment.set_value(digit_segment.get_value())
-
-                    # go to next row
-                    current_location = (current_location[0] + 1, current_location[1])
-            # for horizontal columns
-            else:
-                current_location = (start_location[0] - 1, current_location[1])
-                for digit_segment in column:
-                    place_segment(digit_segment, current_location)
-                    # try:
-                    #     current_board_segment: Segment = board.board[current_location[0]][current_location[1]]
-                    # except IndexError:
-                    #     raise IndexError(f"Cannot place digit {digit_segment.get_value()}. Selected placement is out of grid bounds: {current_location}")
-
-                    # if current_board_segment.get_value() is not None and digit_segment.get_value() is not None:
-                    #     raise ValueError(f'Cannot place digit {digit_segment.get_value()}. Segment at location {current_location} is occupied by: {current_board_segment}.')
-                    # elif current_board_segment.get_direction() != digit_segment.get_direction():
-                    #     raise ValueError(f'Cannot place digit {digit_segment.get_value()}. {current_board_segment.get_direction().capitalize()} segment at location {current_location} does not match the direction of the {digit_segment.get_direction()} digit segment.')
-                    # else:
-                    #     current_board_segment.set_value(digit_segment.get_value())
-
-                    # go to next row
-                    current_location = (current_location[0] + 2, current_location[1])
-                # go to next column, refresh row back to start
-                current_location = (start_location[0], current_location[1] + 1)
+    board.place_digit(digit=zero, start_location=(1, 3), direction='right')
     
     board.draw(save_file_name='output')
 
