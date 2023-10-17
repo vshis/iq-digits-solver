@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 from gameboard.components import BoardSegment, BoardSquare
 from gameboard.utils import grid_utils
 
@@ -5,8 +7,42 @@ from gameboard.utils import grid_utils
 class Digit:
     def __init__(self) -> None:
         self.grid_up = self.grid_down = self.grid_left = self.grid_right = None
+    
+    def get_shape_oriented(self, orientation: str) -> Tuple[int, int]:
+        """Returns an integer tuple (height, width)
 
-    def get_oriented_grid(self, orientation: str):
+        Args:
+            orientation (str): one of ('up', 'down', 'left', 'right')
+
+        Raises:
+            ValueError: when invalid orientation is given
+            
+        Returns:
+            Tuple[int, int]: tuple of height, width
+        """
+        if orientation == 'up':
+            return (len(self.grid_up), len(self.grid_up[0]))
+        elif orientation == 'down':
+            return (len(self.grid_down), len(self.grid_down[0]))
+        elif orientation == 'left':
+            return (len(self.grid_left), len(self.grid_left[0]))
+        elif orientation == 'right':
+            return (len(self.grid_right), len(self.grid_right[0]))
+        else:
+            raise ValueError(f'Invalid orientation chosen: "{orientation}".')
+
+    def get_grid_oriented(self, orientation: str) -> List[List[object]]:
+        """Returns the grid of the digit, as a list of lists of Squares.
+
+        Args:
+            orientation (str): one of ('up', 'down', 'left', 'right')
+
+        Raises:
+            ValueError: when invalid orientation is given
+
+        Returns:
+            List[List[object]]: Square objects in given layout
+        """
         if orientation == 'up':
             return self.grid_up
         elif orientation == 'down':

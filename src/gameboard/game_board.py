@@ -1,8 +1,4 @@
-from matplotlib.path import Path
-from matplotlib.patches import PathPatch
-from matplotlib.collections import PatchCollection
-import matplotlib.pyplot as plt
-import pathlib
+from typing import List, Tuple
 
 from gameboard.components import BoardSegment, BoardSquare
 from gameboard.utils import grid_utils
@@ -28,8 +24,17 @@ class BoardGrid:
         self.height = height
         self.board = grid_utils.create_grid(width=self.width, height=self.height)
 
-    def get_board(self):
+    def get_board(self) -> List[List[object]]:
         return self.board
+
+    def get_shape(self) -> Tuple[int, int]:
+        """Returns an integer tuple (height, width).
+        In other words, (number_of_rows, number_of_cols)
+
+        Returns:
+            Tuple[int, int]: tuple of height, width
+        """
+        return (self.height, self.width)
 
     def get_square(self, row: int, col: int) -> BoardSquare:
         """Get the square at coordinates row, col.
