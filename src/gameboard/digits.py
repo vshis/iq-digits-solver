@@ -1,11 +1,28 @@
 from gameboard.components import BoardSegment, BoardSquare
-from gameboard.utils import create_grid
+from gameboard.utils import grid_utils
 
 
-class Zero:
+class Digit:
+    def __init__(self) -> None:
+        self.grid_up = self.grid_down = self.grid_left = self.grid_right = None
+
+    def get_oriented_grid(self, orientation: str):
+        if orientation == 'up':
+            return self.grid_up
+        elif orientation == 'down':
+            return self.grid_down
+        elif orientation == 'left':
+            return self.grid_left
+        elif orientation == 'right':
+            return self.grid_right
+        else:
+            raise ValueError(f'Invalid orientation chosen: "{orientation}".')
+
+
+class Zero(Digit):
     def __init__(self) -> None:
         # get a square grid
-        self._grid = create_grid.create_grid(1, 1)
+        self._grid = grid_utils.create_grid(1, 1)
         # set values of all segments to 0
         for row in self._grid:
             square_obj: BoardSquare
@@ -16,6 +33,21 @@ class Zero:
 
         self.grid_up = self.grid_down = self.grid_left = self.grid_right = self._grid
 
-class One:
+
+class One(Digit):
     def __init__(self) -> None:
-        pass
+        self.grid_up = grid_utils.create_grid(1, 2)
+        self.grid_up[0][0].set_segment_value(segment='left', new_value=1)
+        self.grid_up[1][0].set_segment_value(segment='left', new_value=1)
+        
+        self.grid_down = grid_utils.create_grid(1, 2)
+        self.grid_down[0][0].set_segment_value(segment='right', new_value=1)
+        self.grid_down[1][0].set_segment_value(segment='right', new_value=1)
+
+        self.grid_left = grid_utils.create_grid(2, 1)
+        self.grid_left[0][0].set_segment_value(segment='down', new_value=1)
+        self.grid_left[0][1].set_segment_value(segment='down', new_value=1)
+
+        self.grid_right = grid_utils.create_grid(2, 1)
+        self.grid_right[0][0].set_segment_value(segment='up', new_value=1)
+        self.grid_right[0][1].set_segment_value(segment='up', new_value=1)
