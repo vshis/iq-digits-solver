@@ -6,6 +6,7 @@ from gameboard.utils import grid_utils
 
 class Digit:
     def __init__(self) -> None:
+        self.value = None
         self.grid_up = self.grid_down = self.grid_left = self.grid_right = None
     
     def get_shape_oriented(self, orientation: str) -> Tuple[int, int]:
@@ -53,10 +54,15 @@ class Digit:
             return self.grid_right
         else:
             raise ValueError(f'Invalid orientation chosen: "{orientation}".')
+    
+    def __str__(self) -> str:
+        return f'{self.__class__.__name__}'
 
 
 class Zero(Digit):
     def __init__(self) -> None:
+        self.value = 0
+
         # get a square grid
         self._grid = grid_utils.create_grid(1, 1)
         # set values of all segments to 0
@@ -64,26 +70,28 @@ class Zero(Digit):
             square_obj: BoardSquare
             for square_obj in row:
                 segment: BoardSegment
-                for segment in square_obj.get_all_segments():
-                    segment.set_value(0)
+                for segment in square_obj.get_all_segments().values():
+                    segment.set_value(self.value)
 
         self.grid_up = self.grid_down = self.grid_left = self.grid_right = self._grid
 
 
 class One(Digit):
     def __init__(self) -> None:
+        self.value = 1
+
         self.grid_up = grid_utils.create_grid(1, 2)
-        self.grid_up[0][0].set_segment_value(segment='left', new_value=1)
-        self.grid_up[1][0].set_segment_value(segment='left', new_value=1)
+        self.grid_up[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='left', new_value=self.value)
         
         self.grid_down = grid_utils.create_grid(1, 2)
-        self.grid_down[0][0].set_segment_value(segment='right', new_value=1)
-        self.grid_down[1][0].set_segment_value(segment='right', new_value=1)
+        self.grid_down[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='right', new_value=self.value)
 
         self.grid_left = grid_utils.create_grid(2, 1)
-        self.grid_left[0][0].set_segment_value(segment='down', new_value=1)
-        self.grid_left[0][1].set_segment_value(segment='down', new_value=1)
+        self.grid_left[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='down', new_value=self.value)
 
         self.grid_right = grid_utils.create_grid(2, 1)
-        self.grid_right[0][0].set_segment_value(segment='up', new_value=1)
-        self.grid_right[0][1].set_segment_value(segment='up', new_value=1)
+        self.grid_right[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='up', new_value=self.value)
