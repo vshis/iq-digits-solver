@@ -1,7 +1,9 @@
 from typing import List, Tuple
+from copy import deepcopy
 
 from gameboard.components import BoardSegment, BoardSquare
 from gameboard.utils import grid_utils
+from gameboard.digits import Digit
 
 
 class BoardGrid:
@@ -20,12 +22,22 @@ class BoardGrid:
     ```
     """    
     def __init__(self, width: int = 5, height: int = 4) -> None:
-        self.width = width
-        self.height = height
-        self.board = grid_utils.create_grid(width=self.width, height=self.height)
+        self._width = width
+        self._height = height
+        self._board = grid_utils.create_grid(width=self._width, height=self._height)
 
     def get_board(self) -> List[List[object]]:
-        return self.board
+        return self._board
+    
+    def set_board(self, new_board: List[List[object]]) -> None:
+        """Set the board list of lists to a new list of lists.
+
+        Args:
+            new_board (List[List[object]]): list of lists of Square objects, defining the new board.
+        """
+        self._board = new_board
+        self._height = len(self._board)
+        self._width = len(self._board[0])
 
     def get_shape(self) -> Tuple[int, int]:
         """Returns an integer tuple (height, width).
@@ -34,7 +46,7 @@ class BoardGrid:
         Returns:
             Tuple[int, int]: tuple of height, width
         """
-        return (self.height, self.width)
+        return (self._height, self._width)
 
     def get_square(self, row: int, col: int) -> BoardSquare:
         """Get the square at coordinates row, col.
@@ -46,11 +58,69 @@ class BoardGrid:
         Returns:
             Square: object instance within the board
         """
-        return self.board[row][col]
+        return self._board[row][col]
+    
+    def place_digit(self, row_coord: int, col_coord: int, digit: Digit, orientation: str) -> None:
+        """Method takes in row, col, digit and orientation and attempts to place it.
+
+        Args:
+            row_coord (int): value of row on the board grid where to place the digit
+            col_coord (int): value of column on the board grid where to place the digit
+            digit (object): instance of Digit object
+            orientation (str): 'up', 'down', 'left' or 'right' - direction in which we want to place the chosen digit
+
+        Raises:
+            ValueError: raised if digit is being placed outside the grid
+            ValueError: raised if digit is being place on top of another digit
+        """
+        # we want a function that:
+        # board.place_digit(x, y, digit, orientation='up')
+        # takes in the coordinates of where on the board to place, the digit object and the orientation
+        # make a copy of list of lists of squares for game board
+        print("WARNING: currently the placement checks allow the crossing of digits One and Seven. Fix in future version.")
+        temp_board = deepcopy(self.get_board())
+
+        # list of lists of squares
+        digit_grid = digit.get_grid_oriented(orientation)
+
+        for row_idx, row in enumerate(digit_grid):
+            digit_square: BoardSquare
+            for square_idx, digit_square in enumerate(row):
+                if orientation == 'up':
+                    row_idx *= -1
+                elif orientation == 'left':
+                    square_idx *= -1
+
+                board_row = row_idx + row_coord
+                board_col = square_idx + col_coord
+
+                # check that the target row and col are within board
+                if not (board_row >= 0 and board_row < self._height and board_col >= 0 and board_col < self._width):
+                    raise ValueError(f'Chosen coordinates "row={board_row}, col={board_col}" are outside the board of shape {self.get_shape()}.')
+                
+                board_square: BoardSquare
+                board_square = temp_board[board_row][board_col]
+
+                # check if the digit square grid can fit on the board grid
+                for key in digit_square.get_all_segments().keys():
+                    digit_segment_val = digit_square.get_segment(key).get_value()
+                    board_segment = board_square.get_segment(key)
+                    board_segment_val = board_segment.get_value()
+
+                    # check if current board segment is None, or if it is not None, then whether the new segment is None
+                    # otherwise we are trying to place a value in occupied segment - thus throw error
+                    if not (board_segment_val is None or (board_segment_val is not None and digit_segment_val is None)):
+                        raise ValueError(f'Cannot place {digit} oriented {orientation} at row={board_row}, col={board_col}, as segment at {key} is already occupied by {board_segment_val}.')
+
+                    if digit_segment_val is not None:
+                        board_square.set_segment_value(key, digit_segment_val)
+                    
+        self.set_board(temp_board)
+        del temp_board
     
     def __str__(self) -> str:
-        out = f'BoardGrid(width={self.width}, height={self.height}, grid=[\n'
-        for row in self.board:
+        out = f'BoardGrid(width={self._width}, height={self._height}, grid=[\n'
+        for row in self._board:
             out += '['
             for square in row:
                 out += str(square) + ', '
