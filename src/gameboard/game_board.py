@@ -82,39 +82,51 @@ class BoardGrid:
 
         # list of lists of squares
         digit_grid = digit.get_grid_oriented(orientation)
+        digit_shape = digit.get_shape_oriented(orientation)
+        digit_shape_norm = (digit_shape[0] - 1, digit_shape[1] - 1)
+        placements = digit_shape[0] * digit_shape[1]
 
-        for row_idx, row in enumerate(digit_grid):
-            digit_square: BoardSquare
-            for square_idx, digit_square in enumerate(row):
-                if orientation == 'up':
-                    row_idx *= -1
-                elif orientation == 'left':
-                    square_idx *= -1
+        for placement_number in range(placements):
+            if orientation == 'up':
+                board_row = row_coord - placement_number
+                board_col = col_coord
+                digit_square = digit_grid[digit_shape_norm[0] - placement_number][digit_shape_norm[1]]
+            elif orientation == 'down':
+                board_row = row_coord + placement_number
+                board_col = col_coord
+                digit_square = digit_grid[placement_number][digit_shape_norm[1]]
+            elif orientation == 'left':
+                board_row = row_coord
+                board_col = col_coord - placement_number
+                digit_square = digit_grid[digit_shape_norm[0]][digit_shape_norm[1] - placement_number]
+            elif orientation == 'right':
+                board_row = row_coord
+                board_col = col_coord + placement_number
+                digit_square = digit_grid[digit_shape_norm[0]][placement_number]
+            else:
+                raise ValueError(f'Unrecognized value for orientation: {orientation}')
+            
+            # check that the target row and col are within board
+            if not (board_row >= 0 and board_row < self._height and board_col >= 0 and board_col < self._width):
+                raise ValueError(f'Chosen coordinates "row={board_row}, col={board_col}" are outside the board of shape {self.get_shape()}.')
+            
+            board_square: BoardSquare
+            board_square = temp_board[board_row][board_col]
 
-                board_row = row_idx + row_coord
-                board_col = square_idx + col_coord
+            # check if the digit square grid can fit on the board grid
+            for key in digit_square.get_all_segments().keys():
+                digit_segment_val = digit_square.get_segment(key).get_value()
+                board_segment = board_square.get_segment(key)
+                board_segment_val = board_segment.get_value()
 
-                # check that the target row and col are within board
-                if not (board_row >= 0 and board_row < self._height and board_col >= 0 and board_col < self._width):
-                    raise ValueError(f'Chosen coordinates "row={board_row}, col={board_col}" are outside the board of shape {self.get_shape()}.')
-                
-                board_square: BoardSquare
-                board_square = temp_board[board_row][board_col]
+                # check if current board segment is None, or if it is not None, then whether the new segment is None
+                # otherwise we are trying to place a value in occupied segment - thus throw error
+                if not (board_segment_val is None or (board_segment_val is not None and digit_segment_val is None)):
+                    raise ValueError(f'Cannot place {digit} oriented {orientation} at row={board_row}, col={board_col}, as segment at {key} is already occupied by {board_segment_val}.')
 
-                # check if the digit square grid can fit on the board grid
-                for key in digit_square.get_all_segments().keys():
-                    digit_segment_val = digit_square.get_segment(key).get_value()
-                    board_segment = board_square.get_segment(key)
-                    board_segment_val = board_segment.get_value()
-
-                    # check if current board segment is None, or if it is not None, then whether the new segment is None
-                    # otherwise we are trying to place a value in occupied segment - thus throw error
-                    if not (board_segment_val is None or (board_segment_val is not None and digit_segment_val is None)):
-                        raise ValueError(f'Cannot place {digit} oriented {orientation} at row={board_row}, col={board_col}, as segment at {key} is already occupied by {board_segment_val}.')
-
-                    if digit_segment_val is not None:
-                        board_square.set_segment_value(key, digit_segment_val)
-                    
+                if digit_segment_val is not None:
+                    board_square.set_segment_value(key, digit_segment_val)
+        
         self.set_board(temp_board)
         del temp_board
     
