@@ -120,8 +120,14 @@ class BoardGrid:
                 board_segment_val = board_segment.get_value()
 
                 # check if current board segment is None, or if it is not None, then whether the new segment is None
+                # or whether the digit segment is the same as board segment (both equal a value that's not None)
+                # which happens when placing digits where 2 squares share a middle segment (like 2, 3, 4, 5, 6, 8, 9)
                 # otherwise we are trying to place a value in occupied segment - thus throw error
-                if not (board_segment_val is None or (board_segment_val is not None and digit_segment_val is None)):
+                if not (
+                    board_segment_val is None or (
+                        board_segment_val is not None and (
+                            digit_segment_val is None or digit_segment_val == board_segment_val
+                            ))):
                     raise ValueError(f'Cannot place {digit} oriented {orientation} at row={board_row}, col={board_col}, as segment at {key} is already occupied by {board_segment_val}.')
 
                 if digit_segment_val is not None:
