@@ -56,7 +56,7 @@ class Digit:
             raise ValueError(f'Invalid orientation chosen: "{orientation}".')
     
     def __str__(self) -> str:
-        return f'{self.__class__.__name__}'
+        return f'{self.__class__.__name__}(shape={self.get_shape_oriented("up")})'
 
 
 class Zero(Digit):
@@ -97,6 +97,171 @@ class One(Digit):
         self.grid_right[0][1].set_segment_value(segment='down', new_value=self.value)
 
 
+class Two(Digit):
+    def __init__(self) -> None:
+        self.value = 2
+
+        self.grid_up = grid_utils.create_grid(1, 2)
+        self.grid_up[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='down', new_value=self.value)
+        
+        self.grid_down = grid_utils.create_grid(1, 2)
+        self.grid_down[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='down', new_value=self.value)
+
+        self.grid_left = grid_utils.create_grid(2, 1)
+        self.grid_left[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='down', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='right', new_value=self.value)
+
+        self.grid_right = grid_utils.create_grid(2, 1)
+        self.grid_right[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='down', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='right', new_value=self.value)
+
+
+class Three(Digit):
+    def __init__(self) -> None:
+        self.value = 3
+
+        self.grid_up = grid_utils.create_grid(1, 2)
+        self.grid_up[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='down', new_value=self.value)
+        
+        self.grid_down = grid_utils.create_grid(1, 2)
+        self.grid_down[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='down', new_value=self.value)
+
+        self.grid_left = grid_utils.create_grid(2, 1)
+        self.grid_left[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='up', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='right', new_value=self.value)
+
+        self.grid_right = grid_utils.create_grid(2, 1)
+        self.grid_right[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='down', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='right', new_value=self.value)
+
+
+class Four(Digit):
+    def __init__(self) -> None:
+        self.value = 4
+
+        self.grid_up = grid_utils.create_grid(1, 2)
+        self.grid_up[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='right', new_value=self.value)
+        
+        self.grid_down = grid_utils.create_grid(1, 2)
+        self.grid_down[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='right', new_value=self.value)
+
+        self.grid_left = grid_utils.create_grid(2, 1)
+        self.grid_left[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='left', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='up', new_value=self.value)
+
+        self.grid_right = grid_utils.create_grid(2, 1)
+        self.grid_right[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='up', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='down', new_value=self.value)
+
+
+class Five(Digit):
+    def __init__(self) -> None:
+        self.value = 5
+
+        self.grid_up = grid_utils.create_grid(1, 2)
+        self.grid_up[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='down', new_value=self.value)
+        
+        self.grid_down = grid_utils.create_grid(1, 2)
+        self.grid_down[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='down', new_value=self.value)
+
+        self.grid_left = grid_utils.create_grid(2, 1)
+        self.grid_left[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='up', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='right', new_value=self.value)
+
+        self.grid_right = grid_utils.create_grid(2, 1)
+        self.grid_right[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='up', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='right', new_value=self.value)
+
+
+class Six(Digit):
+    def __init__(self) -> None:
+        self.value = 6
+
+        self.grid_up = grid_utils.create_grid(1, 2)
+        self.grid_up[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='down', new_value=self.value)
+        
+        self.grid_down = grid_utils.create_grid(1, 2)
+        self.grid_down[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='down', new_value=self.value)
+
+        self.grid_left = grid_utils.create_grid(2, 1)
+        self.grid_left[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='up', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='down', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='right', new_value=self.value)
+
+        self.grid_right = grid_utils.create_grid(2, 1)
+        self.grid_right[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='up', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='right', new_value=self.value)
+
+
 class Seven(Digit):
     def __init__(self) -> None:
         self.value = 7
@@ -120,3 +285,81 @@ class Seven(Digit):
         self.grid_right[0][0].set_segment_value(segment='down', new_value=self.value)
         self.grid_right[0][1].set_segment_value(segment='down', new_value=self.value)
         self.grid_right[0][1].set_segment_value(segment='right', new_value=self.value)
+
+
+class Eight(Digit):
+    def __init__(self) -> None:
+        self.value = 8
+
+        self.grid_up = grid_utils.create_grid(1, 2)
+        self.grid_up[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='left', new_value=self.value)
+
+        self.grid_down = grid_utils.create_grid(1, 2)
+        self.grid_down[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='left', new_value=self.value)
+
+        self.grid_left = grid_utils.create_grid(2, 1)
+        self.grid_left[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='up', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='right', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='down', new_value=self.value)
+
+        self.grid_right = grid_utils.create_grid(2, 1)
+        self.grid_right[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='down', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='right', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='up', new_value=self.value)
+
+
+class Nine(Digit):
+    def __init__(self) -> None:
+        self.value = 9
+
+        self.grid_up = grid_utils.create_grid(1, 2)
+        self.grid_up[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_up[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_up[1][0].set_segment_value(segment='down', new_value=self.value)
+
+        self.grid_down = grid_utils.create_grid(1, 2)
+        self.grid_down[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_down[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_down[1][0].set_segment_value(segment='left', new_value=self.value)
+
+        self.grid_left = grid_utils.create_grid(2, 1)
+        self.grid_left[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='up', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_left[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='up', new_value=self.value)
+        self.grid_left[0][1].set_segment_value(segment='right', new_value=self.value)
+
+        self.grid_right = grid_utils.create_grid(2, 1)
+        self.grid_right[0][0].set_segment_value(segment='down', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='left', new_value=self.value)
+        self.grid_right[0][0].set_segment_value(segment='right', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='down', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='right', new_value=self.value)
+        self.grid_right[0][1].set_segment_value(segment='up', new_value=self.value)
