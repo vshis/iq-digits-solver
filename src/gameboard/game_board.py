@@ -25,6 +25,7 @@ class BoardGrid:
         self._width = width
         self._height = height
         self._board = grid_utils.create_grid(width=self._width, height=self._height)
+        self._placed_values = []
 
     def get_board(self) -> List[List[object]]:
         return self._board
@@ -60,24 +61,27 @@ class BoardGrid:
         """
         return self._board[row][col]
     
-    def place_digit(self, row_coord: int, col_coord: int, digit: Digit, orientation: str) -> None:
+    def place_digit(self, row_coord: int, col_coord: int, digit: Digit, orientation: str) -> Tuple[bool, str]:
         """Method takes in row, col, digit and orientation and attempts to place it.
 
         Args:
             row_coord (int): value of row on the board grid where to place the digit
             col_coord (int): value of column on the board grid where to place the digit
-            digit (object): instance of Digit object
+            digit (Digit): instance of Digit object
             orientation (str): 'up', 'down', 'left' or 'right' - direction in which we want to place the chosen digit
 
         Raises:
-            ValueError: raised if digit is being placed outside the grid
-            ValueError: raised if digit is being place on top of another digit
+            ValueError: if invalid orientation provided
+        
+        Returns: 
+            Tuple of (bool, str), boolean whether digit placement is valid, if it is valid, the digit is placed. 
+            Str error message if placement is invalid, otherwise empty string.
         """
-        # we want a function that:
-        # board.place_digit(x, y, digit, orientation='up')
-        # takes in the coordinates of where on the board to place, the digit object and the orientation
-        # make a copy of list of lists of squares for game board
         print("WARNING: currently the placement checks allow the crossing of digits One and Seven. Fix in future version.")
+        
+        if digit.get_value() in self._placed_values:
+            return False, f'Digit {digit} has already been placed on the board.'
+
         temp_board = deepcopy(self.get_board())
 
         # list of lists of squares
@@ -108,7 +112,7 @@ class BoardGrid:
             
             # check that the target row and col are within board
             if not (board_row >= 0 and board_row < self._height and board_col >= 0 and board_col < self._width):
-                raise ValueError(f'Chosen coordinates "row={board_row}, col={board_col}" are outside the board of shape {self.get_shape()}.')
+                return False, f'Chosen coordinates "row={board_row}, col={board_col}" are outside the board of shape {self.get_shape()}.'
             
             board_square: BoardSquare
             board_square = temp_board[board_row][board_col]
@@ -128,13 +132,15 @@ class BoardGrid:
                         board_segment_val is not None and (
                             digit_segment_val is None or digit_segment_val == board_segment_val
                             ))):
-                    raise ValueError(f'Cannot place {digit} oriented {orientation} at row={board_row}, col={board_col}, as segment at {key} is already occupied by {board_segment_val}.')
+                    return False, f'Cannot place {digit} oriented {orientation} at row={board_row}, col={board_col}, as segment at {key} is already occupied by {board_segment_val}.'
 
                 if digit_segment_val is not None:
                     board_square.set_segment_value(key, digit_segment_val)
         
         self.set_board(temp_board)
         del temp_board
+        self._placed_values.append(digit.get_value())
+        return True, ''
     
     def __str__(self) -> str:
         out = f'BoardGrid(width={self._width}, height={self._height}, grid=[\n'
