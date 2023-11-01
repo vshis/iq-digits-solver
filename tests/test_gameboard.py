@@ -60,3 +60,37 @@ def test_place_digit_on_top_of_another(setup_game_state: dict):
 
     assert valid == False
     assert len(board._placed_values) == 1
+
+
+def test_place_seven_over_one(setup_game_state: dict):
+    """Tests that invalid placement is returned if seven is placed over one, 
+    such that they cross over.
+
+    Args:
+        setup_game_state (dict): pytest fixture
+    """
+    state = setup_game_state
+    board: BoardGrid = state['board']
+
+    valid_one, _ = board.place_digit(1, 0, state['one'], 'up')
+    valid_seven, _ = board.place_digit(1, 1, state['seven'], 'left')
+
+    assert valid_one == True
+    assert valid_seven == False
+
+
+def test_place_one_over_seven(setup_game_state: dict):
+    """Tests that invalid placement is returned if seven is placed over one, 
+    such that they cross over.
+
+    Args:
+        setup_game_state (dict): pytest fixture
+    """
+    state = setup_game_state
+    board: BoardGrid = state['board']
+
+    valid_seven, _ = board.place_digit(1, 1, state['seven'], 'left')
+    valid_one, _ = board.place_digit(1, 0, state['one'], 'up')
+
+    assert valid_seven == True
+    assert valid_one == False

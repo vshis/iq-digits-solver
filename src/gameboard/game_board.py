@@ -77,7 +77,6 @@ class BoardGrid:
             Tuple of (bool, str), boolean whether digit placement is valid, if it is valid, the digit is placed. 
             Str error message if placement is invalid, otherwise empty string.
         """
-        print("WARNING: currently the placement checks allow the crossing of digits One and Seven. Fix in future version.")
         
         if digit.get_value() in self._placed_values:
             return False, f'Digit {digit} has already been placed on the board.'
