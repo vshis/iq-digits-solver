@@ -26,6 +26,7 @@ def test_place_zero_up(setup_game_state: dict):
     assert board.get_board()[0][0].get_segment('left').get_value() == desired_value
     assert board.get_board()[0][0].get_segment('right').get_value() == desired_value
 
+
 def test_place_zero_down(setup_game_state: dict):
     """Tests that zero can be placed facing down
 
