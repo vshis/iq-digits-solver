@@ -25,6 +25,8 @@ def test_place_zero_up(setup_game_state: dict):
     assert board.get_board()[0][0].get_segment('down').get_value() == desired_value
     assert board.get_board()[0][0].get_segment('left').get_value() == desired_value
     assert board.get_board()[0][0].get_segment('right').get_value() == desired_value
+    assert len(board._placed_values) == 1
+    assert board._placed_values == [desired_value]
 
 
 def test_place_zero_down(setup_game_state: dict):
@@ -47,6 +49,8 @@ def test_place_zero_down(setup_game_state: dict):
     assert board.get_board()[0][0].get_segment('down').get_value() == desired_value
     assert board.get_board()[0][0].get_segment('left').get_value() == desired_value
     assert board.get_board()[0][0].get_segment('right').get_value() == desired_value
+    assert len(board._placed_values) == 1
+    assert board._placed_values == [desired_value]
 
 
 def test_place_zero_left(setup_game_state: dict):
@@ -69,6 +73,8 @@ def test_place_zero_left(setup_game_state: dict):
     assert board.get_board()[0][0].get_segment('down').get_value() == desired_value
     assert board.get_board()[0][0].get_segment('left').get_value() == desired_value
     assert board.get_board()[0][0].get_segment('right').get_value() == desired_value
+    assert len(board._placed_values) == 1
+    assert board._placed_values == [desired_value]
 
 
 def test_place_zero_right(setup_game_state: dict):
@@ -91,3 +97,5 @@ def test_place_zero_right(setup_game_state: dict):
     assert board.get_board()[0][0].get_segment('down').get_value() == desired_value
     assert board.get_board()[0][0].get_segment('left').get_value() == desired_value
     assert board.get_board()[0][0].get_segment('right').get_value() == desired_value
+    assert len(board._placed_values) == 1
+    assert board._placed_values == [desired_value]
