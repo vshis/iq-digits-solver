@@ -135,6 +135,11 @@ class BoardGrid:
 
                 if digit_segment_val is not None:
                     board_square.set_segment_value(key, digit_segment_val)
+            
+        # check if seven and one are crossing over, if applicable
+        if digit.get_value() == 1 or digit.get_value == 7:
+            if orientation == 'up':
+                ...
         
         self.set_board(temp_board)
         del temp_board

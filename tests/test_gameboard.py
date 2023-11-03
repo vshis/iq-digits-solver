@@ -62,9 +62,9 @@ def test_place_digit_on_top_of_another(setup_game_state: dict):
     assert len(board._placed_values) == 1
 
 
-def test_place_seven_over_one(setup_game_state: dict):
+def test_place_seven_over_one_up(setup_game_state: dict):
     """Tests that invalid placement is returned if seven is placed over one, 
-    such that they cross over.
+    such that they cross over, with one oriented up.
 
     Args:
         setup_game_state (dict): pytest fixture
@@ -74,6 +74,23 @@ def test_place_seven_over_one(setup_game_state: dict):
 
     valid_one, _ = board.place_digit(1, 0, state['one'], 'up')
     valid_seven, _ = board.place_digit(1, 1, state['seven'], 'left')
+
+    assert valid_one == True
+    assert valid_seven == False
+
+
+def test_place_seven_over_one_down(setup_game_state: dict):
+    """Tests that invalid placement is returned if seven is placed over one, 
+    such that they cross over, with one oriented down.
+
+    Args:
+        setup_game_state (dict): pytest fixture
+    """
+    state = setup_game_state
+    board: BoardGrid = state['board']
+
+    valid_one, _ = board.place_digit(1, 1, state['one'], 'down')
+    valid_seven, _ = board.place_digit(2, 1, state['seven'], 'left')
 
     assert valid_one == True
     assert valid_seven == False
