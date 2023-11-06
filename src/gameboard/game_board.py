@@ -77,8 +77,8 @@ class BoardGrid:
             Tuple of (bool, str), boolean whether digit placement is valid, if it is valid, the digit is placed. 
             Str error message if placement is invalid, otherwise empty string.
         """
-        
-        if digit.get_value() in self._placed_values:
+        current_value = digit.get_value()
+        if current_value in self._placed_values:
             return False, f'Digit {digit} has already been placed on the board.'
 
         temp_board = deepcopy(self.get_board())
@@ -137,10 +137,29 @@ class BoardGrid:
                     board_square.set_segment_value(key, digit_segment_val)
             
         # check if seven and one are crossing over, if applicable
-        if digit.get_value() == 1 or digit.get_value == 7:
-            if orientation == 'up':
-                ...
-        
+        if current_value == 1 or current_value == 7:
+            other_value = 1 if current_value == 7 else 7
+            if orientation == 'up' and col_coord + 1 < self._width:
+                left_square: BoardSquare = temp_board[row_coord][col_coord]
+                right_square: BoardSquare = temp_board[row_coord][col_coord + 1]
+                if left_square.get_segment('up').get_value() == other_value and right_square.get_segment('up').get_value() == other_value:
+                    return False, f'Chosen coordinates "row={board_row}, col={board_col}" result in {current_value} crossing over {other_value}.'
+            elif orientation == 'down' and col_coord - 1 >= 0:
+                left_square: BoardSquare = temp_board[row_coord][col_coord - 1]
+                right_square: BoardSquare = temp_board[row_coord][col_coord]
+                if left_square.get_segment('down').get_value() == other_value and right_square.get_segment('down').get_value() == other_value:
+                    return False, f'Chosen coordinates "row={board_row}, col={board_col}" result in {current_value} crossing over {other_value}.'
+            elif orientation == 'left' and row_coord - 1 >= 0:
+                top_square: BoardSquare = temp_board[row_coord - 1][col_coord]
+                bottom_square: BoardSquare = temp_board[row_coord][col_coord]
+                if top_square.get_segment('left').get_value() == other_value and bottom_square.get_segment('left').get_value() == other_value:
+                    return False, f'Chosen coordinates "row={board_row}, col={board_col}" result in {current_value} crossing over {other_value}.'
+            elif orientation == 'right' and row_coord + 1 < self._height:
+                top_square: BoardSquare = temp_board[row_coord][col_coord]
+                bottom_square: BoardSquare = temp_board[row_coord + 1][col_coord]
+                if top_square.get_segment('right').get_value() == other_value and bottom_square.get_segment('right').get_value() == other_value:
+                    return False, f'Chosen coordinates "row={board_row}, col={board_col}" result in {current_value} crossing over {other_value}.'
+                
         self.set_board(temp_board)
         del temp_board
         self._placed_values.append(digit.get_value())
