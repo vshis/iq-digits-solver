@@ -1,7 +1,7 @@
 from typing import List, Tuple
 from copy import deepcopy
 
-from iq_game.components import BoardSegment, BoardSquare
+from iq_game.components import BoardSquare
 from iq_game.utils import grid_utils
 from iq_game.digits import Digit
 
@@ -29,6 +29,18 @@ class BoardGrid:
 
     def get_board(self) -> List[List[object]]:
         return self._board
+    
+    def is_terminal(self):
+        """Returns True if the game reached a terminal state.
+        Terminal state is when all digits have been placed in allowed positions on the board.
+
+        Returns:
+            bool: True if all ten digits were placed in allowed positions and game is technically
+            "won". False otherwise.
+        """
+        if len(self._placed_values) == 10:
+            return True
+        return False
     
     def set_board(self, new_board: List[List[object]]) -> None:
         """Set the board list of lists to a new list of lists.
