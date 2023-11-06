@@ -27,9 +27,6 @@ class BoardGrid:
         self._board = grid_utils.create_grid(width=self._width, height=self._height)
         self._placed_values = []
 
-    def get_board(self) -> List[List[object]]:
-        return self._board
-    
     def is_terminal(self):
         """Returns True if the game reached a terminal state.
         Terminal state is when all digits have been placed in allowed positions on the board.
@@ -40,9 +37,12 @@ class BoardGrid:
         """
         if len(self._placed_values) == 10:
             return True
-        return False
+        return False    
+
+    def get_board(self) -> List[List[BoardSquare]]:
+        return self._board
     
-    def set_board(self, new_board: List[List[object]]) -> None:
+    def set_board(self, new_board: List[List[BoardSquare]]) -> None:
         """Set the board list of lists to a new list of lists.
 
         Args:
@@ -72,6 +72,20 @@ class BoardGrid:
             Square: object instance within the board
         """
         return self._board[row][col]
+    
+    def remove_digit(self, digit: Digit) -> None:
+        """Method removes given digit from board.
+
+        Args:
+            digit (Digit): instance of a Digit object.
+        """
+        digit_value = digit.get_value()
+        for row in self.get_board():
+            for square in row:
+                for key in square.get_all_segments().keys():
+                    if square.get_segment(key).get_value() == digit_value:
+                        square.set_segment_value(key, None)
+        self._placed_values.remove(digit_value)
     
     def place_digit(self, row_coord: int, col_coord: int, digit: Digit, orientation: str) -> Tuple[bool, str]:
         """Method takes in row, col, digit and orientation and attempts to place it.

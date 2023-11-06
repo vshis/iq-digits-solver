@@ -28,6 +28,7 @@ def test_place_all_digits(setup_game_state: dict):
     
     assert len(valids) == 10
     assert all(valids)
+    assert board.is_terminal()
 
 
 def test_place_digit_out_of_grid_bounds(setup_game_state: dict):
@@ -60,3 +61,50 @@ def test_place_digit_on_top_of_another(setup_game_state: dict):
 
     assert valid == False
     assert len(board._placed_values) == 1
+
+
+def test_remove_digit_from_board(setup_game_state: dict):
+    """Tests that a digit is removed from board.
+
+    Args:
+        setup_game_state (dict): pytest fixture
+    """
+    state = setup_game_state
+    board: BoardGrid = state['board']
+    digit = state['eight']
+    board.place_digit(1, 1, digit, 'up')
+    board.remove_digit(digit)
+    desired_value = None
+    assert board.get_board()[1][1].get_segment('right').get_value() == desired_value
+    assert board.get_board()[1][1].get_segment('left').get_value() == desired_value
+    assert board.get_board()[1][1].get_segment('down').get_value() == desired_value
+    assert board.get_board()[1][1].get_segment('up').get_value() == desired_value
+    assert board.get_board()[0][1].get_segment('up').get_value() == desired_value
+    assert board.get_board()[0][1].get_segment('left').get_value() == desired_value
+    assert board.get_board()[0][1].get_segment('right').get_value() == desired_value
+    assert len(board._placed_values) == 0   
+
+
+def test_remove_digit_from_board_with_multiple_digits(setup_game_state: dict):
+    """Tests that a digit is removed from board where multiple digits are present.
+
+    Args:
+        setup_game_state (dict): pytest fixture
+    """
+    state = setup_game_state
+    board: BoardGrid = state['board']
+    digit = state['zero']
+    board.place_digit(3, 3, state['one'], 'up')
+    board.place_digit(1, 1, digit, 'up')
+    board.remove_digit(digit)
+
+    assert board.get_board()[1][1].get_segment('up').get_value() == None
+    assert board.get_board()[1][1].get_segment('left').get_value() == None
+    assert board.get_board()[1][1].get_segment('right').get_value() == None
+    assert board.get_board()[1][1].get_segment('down').get_value() == None
+
+    assert board.get_board()[3][3].get_segment('right').get_value() == 1
+    assert board.get_board()[2][3].get_segment('right').get_value() == 1
+
+    assert len(board._placed_values) == 1
+    assert board._placed_values == [1]
