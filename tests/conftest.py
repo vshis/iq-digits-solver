@@ -3,8 +3,8 @@ import sys
 
 sys.path.append('./src/')
 
-from gameboard import BoardGrid
-from gameboard.digits import Zero, One, Seven, Two, Three, Four, Five, Six, Eight, Nine, Digit
+from iq_game import BoardGrid
+from iq_game.digits import Zero, One, Seven, Two, Three, Four, Five, Six, Eight, Nine, Digit
 
 
 @pytest.fixture

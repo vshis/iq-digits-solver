@@ -2,7 +2,7 @@ import sys
 
 sys.path.append('./src/')
 
-from gameboard import BoardGrid
+from iq_game import BoardGrid
 
 
 def test_place_all_digits(setup_game_state: dict):

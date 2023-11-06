@@ -1,6 +1,6 @@
-from gameboard import BoardGrid
-from gameboard.digits import Zero, One, Seven, Two, Three, Four, Five, Six, Eight, Nine
-from gameboard.utils import grid_utils
+from iq_game import BoardGrid
+from iq_game.digits import Zero, One, Seven, Two, Three, Four, Five, Six, Eight, Nine
+from iq_game.utils import grid_utils
 
 board = BoardGrid(height=4, width=5)
 

@@ -1,4 +1,4 @@
-from gameboard.components.board_segment import BoardSegment
+from iq_game.components.board_segment import BoardSegment
 
 
 class BoardSquare:

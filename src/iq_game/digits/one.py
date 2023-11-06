@@ -1,5 +1,5 @@
-from gameboard.digits import Digit
-from gameboard.utils import grid_utils
+from iq_game.digits import Digit
+from iq_game.utils import grid_utils
 
 
 class One(Digit):
