@@ -21,11 +21,16 @@ class BoardGrid:
         -       -       -       -       - 
     ```
     """    
-    def __init__(self, width: int = 5, height: int = 4) -> None:
+    def __init__(self, width: int = 5, height: int = 4, initial_state = []) -> None:
         self._width = width
         self._height = height
         self._board = grid_utils.create_grid(width=self._width, height=self._height)
         self._placed_values = []
+        self._initial_values = []
+        # initial state is a dict of initially placed values, which cannot be removed
+        # self._initial_state = [(1, 1, 'one', 'up'), (2, 2, 'zero', 'up')]
+        # for placement in initial_state:
+        #     self.place_digit(*placement)
 
     def is_terminal(self):
         """Returns True if the game reached a terminal state.
@@ -37,7 +42,11 @@ class BoardGrid:
         """
         if len(self._placed_values) == 10:
             return True
-        return False    
+        return False
+    
+    def reset(self):
+        self.set_board(grid_utils.create_grid(width=self._width, height=self._height))
+        self._placed_values = []
 
     def get_board(self) -> List[List[BoardSquare]]:
         return self._board
@@ -73,6 +82,14 @@ class BoardGrid:
         """
         return self._board[row][col]
     
+    def get_placed_digits(self) -> List:
+        """Returns list of values of digits already on board.
+
+        Returns:
+            List: list of values of digits currently placed on board.
+        """
+        return self._placed_values
+    
     def remove_digit(self, digit: Digit) -> None:
         """Method removes given digit from board.
 
@@ -80,6 +97,8 @@ class BoardGrid:
             digit (Digit): instance of a Digit object.
         """
         digit_value = digit.get_value()
+        if digit_value not in self._placed_values:
+            return
         for row in self.get_board():
             for square in row:
                 for key in square.get_all_segments().keys():
