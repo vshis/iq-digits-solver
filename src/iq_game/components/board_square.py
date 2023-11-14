@@ -1,4 +1,4 @@
-from gameboard.components.board_segment import BoardSegment
+from iq_game.components.board_segment import BoardSegment
 
 
 class BoardSquare:
@@ -36,12 +36,43 @@ class BoardSquare:
             self.segment_right.set_value(new_value)
         else:
             raise ValueError(f'Invalid segment value: "{segment}"')
+        
+    def get_segment(self, segment: str) -> BoardSegment:
+        """Get segment object by its string name
+
+        Args:
+            segment (str): one of ('up', 'down', 'left', 'right')
+        
+        Returns:
+            Instance of BoardSegment object.
+        """
+        if segment == 'up':
+            return self.segment_up
+        elif segment == 'down':
+            return self.segment_down
+        elif segment == 'left':
+            return self.segment_left
+        elif segment == 'right':
+            return self.segment_right
+        else:
+            raise ValueError(f'Invalid segment value: "{segment}"')
 
     def get_all_segments(self):
-        """Returns a tuple of all four segments, in order:
-        up, down, left, right
+        """Returns a dict of all four segments with keys/values:
+
+        {
+            up: segment_up object, 
+            down: ..., 
+            left: ...,  
+            right: ...
+        }
         """
-        return self.segment_up, self.segment_down, self.segment_left, self.segment_right
+        return {
+            'up': self.segment_up, 
+            'down': self.segment_down, 
+            'left': self.segment_left, 
+            'right': self.segment_right
+            }
 
     def __str__(self) -> str:
         return f'Square(up={self.segment_up.get_value()}, down={self.segment_down.get_value()}, left={self.segment_left.get_value()}, right={self.segment_right.get_value()})'

@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pathlib
 from typing import List
 
-from gameboard.components import BoardSegment, BoardSquare
+from iq_game.components import BoardSegment, BoardSquare
 
 
 COLOR_MAPPING = {
