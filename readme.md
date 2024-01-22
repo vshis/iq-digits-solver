@@ -4,9 +4,12 @@ This is a solver for the IQ Digits game by Smart Games.
 
 Ref: <https://www.smartgames.eu/uk/one-player-games/iq-digits>
 
+The source puzzles can be acquired from Smart Games: <https://www.smartgames.eu/uk/one-player-games/iq-digits#downloads>
+
 ## Requirements
 
 - Python >= 3.10.6
+- Matplotlib (for drawing game board)
 
 For running tests:
 
@@ -37,11 +40,11 @@ With the different combinations of digits, their orientations and placement on t
 
 Following 810 actions are possible:
 
-- Place digit, given digit, location and orientation.
+- Place digit (given digit, location and orientation).
     - Here, there are 20 board locations, 4 digit orientations and 10 digits.
     - Therefore, we have 20 * 4 * 10 = 800 different actions. 
     - Note that some of these actions will not be useful in practice (like trying to place a digit over another digit).
-- Remove digit from board, given digit.
+- Remove digit from board (given digit).
     - Here, there are 10 different digits that can be on the board.
     - So 10 different actions.
 - In total there are 810 possible actions.
