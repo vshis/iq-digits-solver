@@ -11,7 +11,7 @@ from iq_game.digits import Zero, One, Seven, Two, Three, Four, Five, Six, Eight,
 def setup_game_state():
     """Sets up initial game state. 
 
-    Yields a tuple of (board, *digits), where digits are the digit objects zero-nine.
+    Yields a tuple of (board, *digits), where digits are the digit objects: Zero to Nine.
     """
     initial_state = {}
     initial_state['board'] = BoardGrid(width=5, height=4)
